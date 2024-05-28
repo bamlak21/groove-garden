@@ -25,7 +25,7 @@ const InputBar = styled.input`
   background-color: #19272e;
 `;
 
-const Search = ({ handleSearch }) => {
+const Search = ({ query, setQuery }) => {
   return (
     <SearchBar htmlFor="search">
       <IoSearchOutline />
@@ -33,7 +33,9 @@ const Search = ({ handleSearch }) => {
         name="search"
         type="text"
         placeholder="Search Songs..."
-        onChange={handleSearch}
+        lowercase
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
     </SearchBar>
   );

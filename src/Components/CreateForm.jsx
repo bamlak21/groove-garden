@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import app from "../firebase";
 import Toast from "./Toast";
+import { tab } from "../responsive";
 
 const Form = styled.form`
   display: flex;
@@ -19,6 +20,8 @@ const Form = styled.form`
   justify-content: center;
   margin-top: 100px;
   flex: 2;
+
+  ${tab({ marginTop: "200px" })}
 `;
 
 const FormTitle = styled.div`
@@ -108,18 +111,15 @@ const CreateForm = () => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           if (progress >= 30 && progress <= 78) {
+            const Progress = Math.round(progress);
             setToast({
-              text: "Adding Song " + progress,
+              text: "Adding Song " + Progress + "%",
               status: true,
               bg: "#1845e7",
             });
           }
           console.log("Upload is " + progress + "% done");
-          // setToast({
-          //   text: "Adding " + progress + "% Done",
-          //   status: true,
-          //   bg: "green",
-          // });
+
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");

@@ -13,7 +13,7 @@ import axios from "axios";
 
 function* workGetSong() {
   try {
-    const songs = yield call(fetch, "http://localhost:4000");
+    const songs = yield call(fetch, "https://groove-garden-api.onrender.com/");
     const formatSong = yield songs.json();
     yield put(getSongSuccess(formatSong));
     return;
@@ -24,7 +24,11 @@ function* workGetSong() {
 
 function* workAddSong(action) {
   try {
-    const res = yield call(axios.post, "http://localhost:4000", action.payload);
+    const res = yield call(
+      axios.post,
+      "https://groove-garden-api.onrender.com/",
+      action.payload
+    );
     yield put(addSongSuccess(res));
   } catch (error) {
     yield put(addSongFailure(error));
@@ -35,7 +39,7 @@ function* workDeleteSong(action) {
   try {
     const res = yield call(
       axios.delete,
-      `http://localhost:4000/${action.payload}`
+      `https://groove-garden-api.onrender.com//${action.payload}`
     );
     console.log(res);
     yield put(deleteSongSuccess(res));
@@ -48,7 +52,7 @@ function* workUpdateSong(action) {
   try {
     const res = yield call(
       axios.put,
-      `http://localhost:4000/${action.payload.SongId}`,
+      `https://groove-garden-api.onrender.com//${action.payload.SongId}`,
       action.payload
     );
     yield put(updateSongSuccess(res));

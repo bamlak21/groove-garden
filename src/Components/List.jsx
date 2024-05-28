@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import { BsPlayFill } from "react-icons/bs";
+import React, { useEffect } from "react";
 import { MdOutlineDelete } from "react-icons/md";
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { deleteSong, getSong } from "../state/songState";
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { tab } from "../responsive";
+import { tab, mobile, med } from "../responsive";
 
 const SongListContainer = styled.div`
   display: flex;
@@ -19,11 +18,13 @@ const SongListContainer = styled.div`
   margin-bottom: 20px;
   transition: 0.2s ease;
   height: 50px;
-  width: 700px;
+  width: 80%;
   cursor: pointer;
   background-color: #1f2c32;
 
-  ${tab({ marginLeft: "-50px", width: "550px" })}
+  ${tab({ marginLeft: "-150px" })}
+  ${med({ width: "400px" })}
+  ${mobile({ width: "300px", height: "60px", gap: "20px" })}
 `;
 
 const SongDetails = styled.div`
@@ -31,6 +32,7 @@ const SongDetails = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 40%;
+
   &:hover {
     color: #084868;
   }
@@ -63,7 +65,7 @@ const DeleteIcon = styled(MdOutlineDelete)`
   }
 `;
 
-const List = ({ song, playClick, playingRef }) => {
+const List = ({ song, playClick }) => {
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
@@ -75,7 +77,7 @@ const List = ({ song, playClick, playingRef }) => {
   }, []);
 
   return (
-    <SongListContainer ref={playingRef}>
+    <SongListContainer>
       <SongDetails onClick={() => playClick(song)}>
         <SongTitle>{song?.title}</SongTitle>
         <SongArtist>By {song?.artist}</SongArtist>

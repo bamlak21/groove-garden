@@ -16,9 +16,17 @@ export const tab = (props) => {
   `;
 };
 
+export const big = (props) => {
+  return css`
+    @media (max-width: 660px) {
+      ${props}
+    }
+  `;
+};
+
 export const med = (props) => {
   return css`
-    @media (max-width: 550px) {
+    @media (max-width: 560px) {
       ${props}
     }
   `;

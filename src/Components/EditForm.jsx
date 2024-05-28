@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { addSong, getSong, updateSong } from "../state/songState";
+import { getSong, updateSong } from "../state/songState";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getStorage,
@@ -11,6 +11,7 @@ import {
 import app from "../firebase";
 import Toast from "./Toast";
 import { useLocation } from "react-router-dom";
+import { tab } from "../responsive";
 
 const Form = styled.form`
   display: flex;
@@ -20,6 +21,8 @@ const Form = styled.form`
   justify-content: center;
   margin-top: 100px;
   flex: 2;
+
+  ${tab({ marginTop: "200px" })}
 `;
 
 const FormTitle = styled.div`
@@ -103,17 +106,26 @@ const EditForm = () => {
       const storage = getStorage(app);
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
+      setToast({
+        text: "Updating Song Please wait ",
+        status: true,
+        bg: "#1845e7",
+      });
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (progress >= 30 && progress <= 78) {
+            const Progress = Math.round(progress);
+            setToast({
+              text: "Updating Song " + Progress + "%",
+              status: true,
+              bg: "#1845e7",
+            });
+          }
           console.log("Upload is " + progress + "% done");
-          // setToast({
-          //   text: "Adding " + progress + "% Done",
-          //   status: true,
-          //   bg: "green",
-          // });
+
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -165,7 +177,7 @@ const EditForm = () => {
             type="text"
             name="title"
             id="title"
-            placeholder={song.title}
+            placeholder={song?.title}
             onChange={handleChange}
           />
         </FormTitle>
@@ -175,7 +187,7 @@ const EditForm = () => {
             type="text"
             name="artist"
             id="artist"
-            placeholder={song.artist}
+            placeholder={song?.artist}
             onChange={handleChange}
           />
         </FormArtist>
@@ -188,8 +200,7 @@ const EditForm = () => {
             onChange={(e) => setFile(e.target.files[0])}
           />
         </FormUpload>
-        {/* <Label htmlFor="art">Music art</Label>
-      <Input type="file" name="art" id="art" /> */}
+
         <Button onClick={handleClick}>Update</Button>
       </Form>
     </>

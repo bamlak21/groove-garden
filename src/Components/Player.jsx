@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
-import { css } from "@emotion/css";
+import React, { useRef, useState } from "react";
 import { IoPauseCircleSharp, IoPlayCircleSharp } from "react-icons/io5";
 import { FaStepBackward, FaStepForward } from "react-icons/fa";
 import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import List from "./List";
-import { med } from "../responsive";
+import { big, med, mobile, tab } from "../responsive";
+import Search from "./Search";
 
 const rotate = keyframes`
   from{
@@ -21,23 +21,31 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 100px;
 `;
 
 const Heading = styled.h2`
   margin-bottom: 10px;
+
+  ${mobile({ marginLeft: "-30px", marginBottom: "20px" })}
 `;
 
 const PlayerContainer = styled.div`
-  bottom: 0;
+  bottom: 10px;
   left: 0;
   position: fixed;
-  width: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
   gap: 80px;
-  padding: 10px 20px;
+  padding: 10px 40px;
+  margin-right: 30px;
+  margin-left: 30px;
   background-color: #084868;
   color: white;
+  border-radius: 22px;
+
+  ${big({ marginLeft: "15px", gap: "20px" })}
 `;
 
 const SongContent = styled.div`
@@ -51,21 +59,22 @@ const SongDetails = styled.div`
   font-size: 14px;
 `;
 
-const SongTitle = styled.p`
-  font-size: 20px;
+const SongTitle = styled.h6`
+  font-size: 16px;
 `;
 const SongArtist = styled.p`
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: light;
 `;
 
 const Img = styled.img`
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   animation: ${rotate} 4s infinite linear;
   animation-play-state: ${(props) => props?.animate};
 
-  ${med({ display: "none" })}
+  ${tab({ display: "none" })}
 `;
 
 const Controls = styled.div`
@@ -97,6 +106,7 @@ const Progress = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  ${mobile({ display: "none" })}
 `;
 const ProgressBar = styled.div`
   width: 0;
@@ -107,6 +117,7 @@ const ProgressBar = styled.div`
   &:hover {
     padding: 4px;
   }
+  ${mobile({ display: "none" })}
 `;
 
 const Volume = styled.div`
@@ -129,23 +140,24 @@ const Volume = styled.div`
 const Player = ({
   animate,
   pic,
-  music,
   audioElem,
   isPlaying,
   setIsPlaying,
   currentSong,
   setCurrentSong,
   volume,
-  setVolume,
   handleVolumeChange,
   songs,
-  setSongs,
   skipToNext,
   skipBack,
-  setAnimate,
 }) => {
   const clickRef = useRef();
-  const playingRef = useRef();
+
+  const [query, setQuery] = useState("");
+
+  const filteredSongs = songs.filter((song) =>
+    song.title.toLowerCase().includes(query.toLowerCase())
+  );
 
   function handlePlay() {
     setIsPlaying(!isPlaying);
@@ -160,17 +172,21 @@ const Player = ({
   };
 
   const playClick = (song) => {
-    setCurrentSong(song);
-    setIsPlaying(!isPlaying);
-    playingRef.current.style.color = "#084868";
+    if (song === currentSong) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setCurrentSong(song);
+      setIsPlaying(true);
+    }
   };
 
   return (
     <>
+      <Search query={query} setQuery={setQuery} />
       <Heading>Tracks</Heading>
       <ListContainer>
-        {songs &&
-          songs.map((song) => {
+        {filteredSongs &&
+          filteredSongs.map((song) => {
             return <List song={song} playClick={playClick} key={song._id} />;
           })}
       </ListContainer>

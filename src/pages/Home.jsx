@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import Player from "../Components/Player";
-import pic from "../Assets/Girlfriend.jpg";
+import pic from "../Assets/disc.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getSong } from "../state/songState";
-import Search from "../Components/Search";
 import styled from "@emotion/styled";
 
 const Container = styled.div`
@@ -17,7 +16,6 @@ const Home = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState(""); // Initialize with the URL of the first song
   const [volume, setVolume] = useState(0.5); // Add state for volume
-  const [query, setQuery] = useState("");
 
   const audioElem = useRef();
 
@@ -78,7 +76,6 @@ const Home = () => {
 
   return (
     <Container>
-      <Search />
       <audio
         src={currentSong?.url}
         ref={audioElem}
