@@ -22,7 +22,7 @@ const SongListContainer = styled.div`
   cursor: pointer;
   background-color: #1f2c32;
 
-  ${tab({ marginLeft: "-150px" })}
+  ${tab({ marginLeft: "-150px", padding: "30px 0px" })}
   ${med({ width: "400px" })}
   ${mobile({ width: "300px", height: "60px", gap: "20px" })}
 `;
@@ -77,8 +77,8 @@ const List = ({ song, playClick }) => {
   }, []);
 
   return (
-    <SongListContainer>
-      <SongDetails onClick={() => playClick(song)}>
+    <SongListContainer onClick={() => playClick(song)}>
+      <SongDetails>
         <SongTitle>{song?.title}</SongTitle>
         <SongArtist>By {song?.artist}</SongArtist>
       </SongDetails>
